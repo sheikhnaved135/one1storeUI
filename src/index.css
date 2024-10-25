@@ -1,0 +1,80 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+.navbar {
+  text-transform: uppercase;
+  font-weight: 500;
+  font-size: 18px;
+}
+.navbar-brand {
+  font-size: 18px;
+  letter-spacing: 2px;
+  font-weight: 700;
+}
+.navbar {
+  box-shadow: 0 8px 6px -6px gray;
+}
+.active {
+  border-bottom: 1px solid black;
+}
+
+.pnf {
+  min-height: 74vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+/* register page css */
+.register {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  min-height: 70vh;
+}
+/* fogot password */
+.forgot {
+  cursor: pointer;
+}
+.forgot:hover {
+  color: blue;
+  font-size: 18px;
+}
+
+/*  */
+@media (max-width: 768px) {
+  .filter-sider {
+    display: none; /* Hide the sider on small screens */
+  }
+
+  .ant-layout-content {
+    padding-left: 0; /* Remove left padding */
+    padding-right: 0; /* Remove right padding */
+  }
+}
+/* billing css */
+.billing-card {
+  background-color: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: calc(100% - 2rem); /* Adjust width based on margins */
+  margin: 2px; /* Add some margin around the card */
+  z-index: 1000; /* Ensure it's on top of other content */
+}
+
+.billing-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 2px 0;
+  font-size: 1.1rem;
+}
+
+.billing-total {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
