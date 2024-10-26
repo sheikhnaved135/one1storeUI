@@ -55,7 +55,7 @@ const Header = () => {
       setShowLogoutModal(false); // Hide the modal after logout
       toast.success("Logged out successfully");
       navigate("/login");
-    }, 5000);
+    }, 1000);
   };
   return (
     <>

@@ -6,7 +6,6 @@ import Home from "./pages/Home";
 import Contact from "./pages/Contact";
 import About from "./pages/About";
 import Policy from "./pages/Policy";
-import PageNotFound from "./pages/PageNotFound";
 // import Layout from "./components/layouts/Layout";
 import Register from "./pages/Auth/Register";
 import Login from "./pages/Auth/Login";
@@ -28,6 +27,8 @@ import Search from "./components/layouts/Search";
 import CategoryPage from "./components/CategoryPage";
 import CategoryProduct from "./pages/CategoryProduct";
 import ScrollToTop from "./components/ScrollToTop";
+import UnderProgress from "./components/UnderProgress";
+import PageNotFound from "./components/PageNotFound";
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
         <Route path="/cart" element={<CartPage />} />
         <Route path="/product/:slug" element={<SingleProduct />} />
         <Route path="/search" element={<Search />} />
+        <Route path="/payment" element={<UnderProgress />} />
         <Route path="/dashboard" element={<Private />}>
           <Route path="user/profile" element={<Profile />} />
           <Route path="user/orders" element={<Orders />} />

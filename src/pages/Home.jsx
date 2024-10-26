@@ -23,6 +23,7 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
+  const [count, setCount] = useState(1);
   const navigate = useNavigate();
 
   // Fetch products
@@ -226,11 +227,26 @@ const Home = () => {
                       price={item.price}
                       id={item._id}
                       addTocart={() => {
-                        setCart([...cart, item]);
-                        localStorage.setItem(
-                          "cart",
-                          JSON.stringify([...cart, item])
+                        const res = cart.some(
+                          (element) => element._id == item._id
                         );
+                        if (res) {
+                          const index = cart.findIndex(
+                            (element) => element._id == item._id
+                          );
+                          cart[index].count++;
+                          setCart([...cart]);
+                          localStorage.setItem(
+                            "cart",
+                            JSON.stringify([...cart])
+                          );
+                        } else {
+                          setCart([...cart, { ...item, count: count }]);
+                          localStorage.setItem(
+                            "cart",
+                            JSON.stringify([...cart, { ...item, count: count }])
+                          );
+                        }
                         toast.success("Added to cart");
                       }}
                       moreInfo={() => navigate(`/product/${item.slug}`)}
