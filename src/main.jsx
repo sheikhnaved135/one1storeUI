@@ -6,13 +6,17 @@ import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./authContext/Auth.jsx";
 import { CartProvider } from "./authContext/Cart.jsx";
 import { SearchProvider } from "./authContext/Search.jsx";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+const queryClient = new QueryClient();
 // https://ecommerce24.onrender.com
 ReactDOM.createRoot(document.getElementById("root")).render(
   <AuthProvider>
     <SearchProvider>
       <BrowserRouter>
         <CartProvider>
-          <App />
+          <QueryClientProvider client={queryClient}>
+            <App />
+          </QueryClientProvider>
         </CartProvider>
       </BrowserRouter>
     </SearchProvider>

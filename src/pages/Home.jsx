@@ -29,6 +29,7 @@ const Home = () => {
   // Fetch products
   const getProducts = async () => {
     setProgress(20);
+    console.log("product api is called");
     setLoading(true);
     try {
       const res = await axios.get(
