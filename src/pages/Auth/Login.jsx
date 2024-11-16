@@ -15,6 +15,8 @@ const Login = () => {
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const [typing, setTyping] = useState(false);
+  const [timer, setTimer] = useState(null);
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -104,7 +106,17 @@ const Login = () => {
                       placeholder="Enter your email"
                       type="email"
                       value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      onChange={(e) => {
+                        if (timer) {
+                          clearTimeout(timer);
+                        }
+                        setTyping(true);
+                        setEmail(e.target.value);
+                        const newTimer = setTimeout(() => {
+                          setTyping(false);
+                        }, 500);
+                        setTimer(newTimer);
+                      }}
                       className="form-control rounded-3"
                       id="exampleInputEmail1"
                       aria-describedby="emailHelp"
@@ -121,7 +133,17 @@ const Login = () => {
                     <input
                       placeholder="Enter your password"
                       value={password}
-                      onChange={(e) => setPassword(e.target.value)}
+                      onChange={(e) => {
+                        if (timer) {
+                          clearTimeout(timer);
+                        }
+                        setTyping(true);
+                        setPassword(e.target.value);
+                        const newTimer = setTimeout(() => {
+                          setTyping(false);
+                        }, 500);
+                        setTimer(newTimer);
+                      }}
                       type="password"
                       className="form-control rounded-3"
                       id="exampleInputPassword1"
@@ -136,10 +158,11 @@ const Login = () => {
                     Forgot Password?
                   </p>
                   <button
+                    disabled={typing}
                     type="submit"
                     className="btn btn-primary w-100 rounded-3"
                   >
-                    Login
+                    {typing ? "typing..." : "Login"}
                   </button>
                 </form>
               </div>
