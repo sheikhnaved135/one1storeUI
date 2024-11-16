@@ -16,7 +16,7 @@ const CartPage = () => {
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
-    }, 2000);
+    }, 500);
   }, [cart]);
   const updateCart = (newCart) => {
     setCart(newCart);
