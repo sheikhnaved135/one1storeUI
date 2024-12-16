@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Layout from "../components/layouts/Layout";
 import { toast } from "react-toastify";
 import axios from "axios";
@@ -250,7 +250,11 @@ const Home = () => {
                         }
                         toast.success("Added to cart");
                       }}
-                      moreInfo={() => navigate(`/product/${item.slug}`)}
+                      moreInfo={() =>
+                        navigate(`/product/${item.slug}`, {
+                          state: { id: item._id },
+                        })
+                      }
                     />
                   </div>
                 ))

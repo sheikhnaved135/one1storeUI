@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Layout from "./layouts/Layout";
 import useCategory from "../hooks/useCategory";
 import { useNavigate } from "react-router-dom";
@@ -9,7 +9,7 @@ import { ShimmerTable } from "react-shimmer-effects";
 const CategoryPage = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
-  const getCategory = async () => {
+  const getCategory = useCallback(async () => {
     setLoading(true);
     try {
       const { data } = await axios.get(
@@ -21,10 +21,10 @@ const CategoryPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
   useEffect(() => {
     getCategory();
-  }, []);
+  }, [getCategory]);
   const navigate = useNavigate();
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 

@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import Layout from "./layouts/Layout";
 import { useCart } from "../authContext/Cart";
@@ -13,13 +13,19 @@ const SingleProduct = () => {
   const [related, setRelated] = useState([]);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [count, setCount] = useState(1);
+  const location = useLocation();
+  const { id } = location.state;
+  // console.log(id);
   const getSingleProduct = async () => {
     try {
       setLoading(true);
       const res = await axios.get(
         `${import.meta.env.VITE_APP}/api/v1/product/get-product/${params.slug}`
       );
-      setProduct(res.data.product);
+      if (res?.data) {
+        setProduct(res.data.product);
+      }
       similarProduct(res.data.product._id, res.data.product.category._id);
     } catch (error) {
       console.error(error);
@@ -104,9 +110,27 @@ const SingleProduct = () => {
                   <button
                     className="btn btn-success"
                     onClick={() => {
-                      const updatedCart = [...cart, product];
-                      setCart(updatedCart);
-                      localStorage.setItem("cart", JSON.stringify(updatedCart));
+                      const existingCart =
+                        JSON.parse(localStorage.getItem("cart")) || [];
+                      console.log(existingCart);
+                      const result = cart.some((ele) => ele._id === id);
+                      console.log(result);
+                      if (result) {
+                        const index = cart.findIndex((ele) => ele._id === id);
+                        cart[index].count++;
+                        setCart([...cart]);
+                        localStorage.setItem("cart", JSON.stringify(cart));
+                      } else {
+                        const updatedCart = [
+                          ...existingCart,
+                          { ...product, count: 1 },
+                        ];
+                        setCart(updatedCart);
+                        localStorage.setItem(
+                          "cart",
+                          JSON.stringify(updatedCart)
+                        );
+                      }
                       toast.success("Product added to cart!");
                     }}
                   >
@@ -146,9 +170,23 @@ const SingleProduct = () => {
                     price={item.price}
                     id={item._id}
                     addTocart={() => {
-                      const updatedCart = [...cart, item];
-                      setCart(updatedCart);
-                      localStorage.setItem("cart", JSON.stringify(updatedCart));
+                      console.log("fucker man");
+                      const result = cart.some((ele) => ele._id == item._id);
+                      console.log(result);
+                      if (result) {
+                        const index = cart.findIndex(
+                          (ele) => ele._id == item._id
+                        );
+                        cart[index].count++;
+                        setCart([...cart]);
+                        localStorage.setItem("cart", JSON.stringify([...cart]));
+                      } else {
+                        setCart([...cart, { ...item, count: 1 }]);
+                        localStorage.setItem(
+                          "cart",
+                          JSON.stringify([...cart, { ...item, count: 1 }])
+                        );
+                      }
                       toast.success("Added to cart!");
                     }}
                     moreInfo={() => {
