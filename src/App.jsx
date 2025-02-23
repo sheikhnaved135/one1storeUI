@@ -29,6 +29,8 @@ import CategoryProduct from "./pages/CategoryProduct";
 import ScrollToTop from "./components/ScrollToTop";
 import UnderProgress from "./components/UnderProgress";
 import PageNotFound from "./components/PageNotFound";
+import Cancel from "./pages/Cancel";
+import Success from "./pages/Success";
 
 function App() {
   return (
@@ -43,6 +45,8 @@ function App() {
         <Route path="/product/:slug" element={<SingleProduct />} />
         <Route path="/search" element={<Search />} />
         <Route path="/payment" element={<UnderProgress />} />
+        <Route path="/cancel" element={<Cancel />} />
+        <Route path="/success" element={<Success />} />
         <Route path="/dashboard" element={<Private />}>
           <Route path="user/profile" element={<Profile />} />
           <Route path="user/orders" element={<Orders />} />

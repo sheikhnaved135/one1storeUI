@@ -6,17 +6,19 @@ import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ShimmerContentBlock } from "shimmer-effects-react";
 import { loadStripe } from "@stripe/stripe-js";
+import axios from "axios";
 const CartPage = () => {
   const [cart, setCart] = useCart();
   const [auth] = useAuth();
   const [totalPrice, setTotalPrice] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [loading1, setLoading1] = useState(false);
   const deliveryCharge = 50;
   const taxRate = 0.1;
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
-    }, 500);
+    }, 200);
   }, [cart]);
   const updateCart = (newCart) => {
     setCart(newCart);
@@ -61,35 +63,30 @@ const CartPage = () => {
     return totalPrice + tax + deliveryCharge;
   };
 
-  const makePayment = async () => {
-    const stripe = await loadStripe(
-      "pk_test_51Pms34P2G3iZClWQaHxXnyeMEm9lQyH4mMn6VppoIJlAb9Q9hjL2zIEzvUcyEA7lVkZAQxOgS0xeDCDO9EUAQvfv00n0r7sJiP"
-    );
-
-    const body = {
-      products: cart,
-    };
-    const headers = {
-      "Content-Type": "application/json",
-    };
-
+  const handlePayment2 = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/payment/checkout`, {
-        method: "POST",
-        headers: headers,
-        body: JSON.stringify(body),
-      });
-
-      const session = await response.json();
-      const result = await stripe.redirectToCheckout({
-        sessionId: session._id,
-      });
-
-      if (result.error) {
-        console.log(result.error.message);
+      setLoading1(true);
+      const stripe = await loadStripe(import.meta.env.VITE_STRIPE_KEY);
+      const response = await axios.post(
+        "http://localhost:8080/api/v1/payment/checkout",
+        { products: cart },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response?.data?.success) {
+        const result = await stripe.redirectToCheckout({
+          sessionId: response?.data?.id,
+        });
       }
+      toast.success("Payment successful");
     } catch (error) {
-      console.error("Error creating Stripe session:", error);
+      toast.error("Something went wrong");
+      console.log("error in payment", error);
+    } finally {
+      setLoading1(true);
     }
   };
   const navigate = useNavigate();
@@ -228,18 +225,29 @@ const CartPage = () => {
                         ₹{calculateTotalCost().toFixed(2)}
                       </h5>
                     </div>
-                    <div className="text-center mt-4">
+                    <div className="d-flex flex-column align-items-center mt-4 gap-3">
                       {auth?.user ? (
                         <button
-                          className="btn btn-primary btn-lg"
-                          onClick={() => navigate("/payment")}
+                          className="btn btn-primary btn-lg d-flex align-items-center justify-content-center"
+                          onClick={handlePayment2}
+                          disabled={loading1}
+                          style={{ minWidth: "200px", height: "10%" }} // Adjust width for consistency
                         >
-                          Proceed to Checkout
+                          {loading1 ? (
+                            <span
+                              className="spinner-border spinner-border-sm"
+                              role="status"
+                              aria-hidden="true"
+                            ></span>
+                          ) : (
+                            "Proceed to Checkout"
+                          )}
                         </button>
                       ) : (
                         <button
-                          className="btn btn-primary btn-lg mt-2"
+                          className="btn btn-primary btn-lg w-100"
                           onClick={() => navigate("/login")}
+                          style={{ maxWidth: "200px" }} // Matches width for consistency
                         >
                           Login to continue
                         </button>
