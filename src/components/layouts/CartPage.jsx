@@ -68,7 +68,7 @@ const CartPage = () => {
       setLoading1(true);
       const stripe = await loadStripe(import.meta.env.VITE_STRIPE_KEY);
       const response = await axios.post(
-        "http://localhost:8080/api/v1/payment/checkout",
+        `${import.meta.env.VITE_APP}/api/v1/payment/checkout`,
         { products: cart },
         {
           headers: {
@@ -86,7 +86,7 @@ const CartPage = () => {
       toast.error("Something went wrong");
       console.log("error in payment", error);
     } finally {
-      setLoading1(true);
+      setLoading1(false);
     }
   };
   const navigate = useNavigate();
